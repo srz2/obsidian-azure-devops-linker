@@ -145,15 +145,54 @@ export default class AzureLinkerPlugin extends Plugin {
 		if (content == ''){
 			new AzureIssueInputModal(this.app, this.settings.input_modal_settings.insert_newline_after_return, (result) => {
 				if (result !== ''){
-					const newStr = this.createWebUrl(azure_url, result)
-					editor.replaceSelection(newStr);
+					// Parse input for project
+					const posDash = result.indexOf('-');
+					if (posDash >= 0){
+						const abbrev = result.substring(0, posDash).toLowerCase();
+						const targetProject = this.settings.azure_projects.filter(x => {
+							return x.Abbreviation.toLowerCase() === abbrev
+						})[0]
+						const newStr = this.createWebUrl(azure_url, targetProject.Name, result)
+						editor.replaceSelection(newStr)
+					} else {
+						const suggestion = new AzureProjectSuggestModal(app, this.settings.azure_projects, (projectResult) => {
+							const newStr = this.createWebUrl(azure_url, projectResult.Name, result)
+							editor.replaceSelection(newStr);
+						})
+						suggestion.setPlaceholder('Project parse failed, select the project to use as a reference')
+						suggestion.open();
+					}
 				}
 			})
-			.setDescription('Enter an issue number which will then be appended to your Azure instance url')
+			.setDescription('Enter an issue number which will then be appended to your Azure url')
 			.open();
 		} else {
-			const newStr = this.createWebUrl(azure_url, content)
-			editor.replaceSelection(newStr);
+			// Parse input for project
+			const posDash = content.indexOf('-');
+			if (posDash >= 0){
+				const abbrev = content.substring(0, posDash).toLowerCase();
+				const targetProject = this.settings.azure_projects.filter(x => {
+					return x.Abbreviation.toLowerCase() === abbrev
+				})[0]
+				if (!targetProject) {
+					const suggestion = new AzureProjectSuggestModal(app, this.settings.azure_projects, (projectResult) => {
+						const newStr = this.createWebUrl(azure_url, projectResult.Name, content);
+						editor.replaceSelection(newStr);
+					})
+					suggestion.setPlaceholder('Selected issue contains unknown project, what project would you like to use?')
+					suggestion.open();
+				} else {
+					const newStr = this.createWebUrl(azure_url, targetProject.Name, content)
+					editor.replaceSelection(newStr)
+				}
+			} else {
+				const suggestion = new AzureProjectSuggestModal(app, this.settings.azure_projects, (projectResult) => {
+					const newStr = this.createWebUrl(azure_url, projectResult.Name, content);
+					editor.replaceSelection(newStr);
+				})
+				suggestion.setPlaceholder('Selected issue contains unknown project, what project would you like to use?')
+				suggestion.open();
+			}
 		}
 	}
 
@@ -165,10 +204,17 @@ export default class AzureLinkerPlugin extends Plugin {
 	 * @returns {string} A fully formed markdown Url representing a Azure with the issue as a label
 	 */
 	createWebUrl(azure_url: string, project_name: string, azure_issue: string): string {
-		//TODO Make project name HTML Safe
-		const htmlsafe_project_name = project_name;
-
-		return `[${azure_issue}](${azure_url}/${htmlsafe_project_name}/${azure_issue})`
+		// Make project name HTML Safe
+		const re = / /gi
+		const htmlsafe_project_name = project_name.replace(re, "%20");
+		const dashPos = azure_issue.indexOf('-') + 1
+		if (dashPos < 0) {
+			console.log('Failed to get ticket number')
+			return ''
+		} else {
+			const ticketNum = azure_issue.substring(dashPos)
+			return `[${azure_issue}](${azure_url}/${htmlsafe_project_name}/_workitems/edit/${ticketNum})`
+		}		
 	}
 
 	/**

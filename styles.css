@@ -15,6 +15,14 @@ If your plugin does not need CSS, delete this file.
 	width: 100%;
 }
 
+.setting_azure_projects_name {
+	width: 65%;
+}
+
+.setting_azure_projects_abbrev {
+	width: 35%;
+}
+
 .azure_instance_title {
 	font-size: 18px;
 	margin: 0;
@@ -23,6 +31,22 @@ If your plugin does not need CSS, delete this file.
 }
 
 .azure_instance_url {
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+	color: gray;
+	margin-left: 12px;
+	font-style: italic;
+}
+
+.azure_project_name {
+	font-size: 18px;
+	margin: 0;
+	padding: 0;
+	color: rgb(172, 170, 170);
+}
+
+.azure_project_abbrev {
 	font-size: 14px;
 	margin: 0;
 	padding: 0;
