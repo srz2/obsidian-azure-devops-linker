@@ -363,7 +363,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 		const content = document.createElement('div')
 		content.innerHTML = `
 		<p>The list of Projects and Abbreviations for your Azure instances</p>
-		<p>Issues for different projects are shortened to use abbreviations to make the Obsidian notes more concise</p>
+		<p>Issues for different projects are parsed from user input using the abbreviations. The <b>Project Name</b> should directly reflect the DevOps project name. The <b>abbreviation</b> should be whatever is convenient for the user.</p>
 		`
 		desc.append(content)
 
