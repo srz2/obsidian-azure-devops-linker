@@ -152,8 +152,18 @@ export default class AzureLinkerPlugin extends Plugin {
 						const targetProject = this.settings.azure_projects.filter(x => {
 							return x.Abbreviation.toLowerCase() === abbrev
 						})[0]
-						const newStr = this.createWebUrl(azure_url, targetProject.Name, result)
-						editor.replaceSelection(newStr)
+
+						if (targetProject){
+							const newStr = this.createWebUrl(azure_url, targetProject.Name, result)
+							editor.replaceSelection(newStr)
+						} else {
+							const suggestion = new AzureProjectSuggestModal(app, this.settings.azure_projects, (projectResult) => {
+								const newStr = this.createWebUrl(azure_url, projectResult.Name, result)
+								editor.replaceSelection(newStr)
+							})
+							suggestion.setPlaceholder('Project not found, select the project to use as a reference')
+							suggestion.open();
+						}
 					} else {
 						const suggestion = new AzureProjectSuggestModal(app, this.settings.azure_projects, (projectResult) => {
 							const newStr = this.createWebUrl(azure_url, projectResult.Name, result)
