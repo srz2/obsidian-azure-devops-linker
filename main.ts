@@ -2,9 +2,12 @@ import { App, Editor, MarkdownView, Notice, Plugin, PluginSettingTab, Setting } 
 import {AzureInstanceSuggestModal} from 'Modals/AzureInstanceSuggestModal'
 import { AzureIssueInputModal } from 'Modals/AzureIssueInputModal';
 import { IAzureInstanceUrl } from 'Models/AzureInstanceUrl';
+import { IAzureProject } from 'Models/AzureProject';
+import { AzureProjectSuggestModal } from 'Modals/AzureProjectSuggestModal';
 
 interface LocalSettings {
 	azure_instance_urls: IAzureInstanceUrl[];
+	azure_projects: IAzureProject[];
 	local_issue_path: string;
 	local_issue_info_file: string;
 	input_modal_settings: {
@@ -14,6 +17,7 @@ interface LocalSettings {
 
 const DEFAULT_SETTINGS: LocalSettings = {
 	azure_instance_urls: [],
+	azure_projects: [],
 	local_issue_path: '',
 	local_issue_info_file: '_Info',
 	input_modal_settings: {
@@ -205,6 +209,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		this.add_azure_instance_settings(containerEl);
+		this.add_azure_project_settings(containerEl);
 		this.add_azure_local_issue_settings(containerEl);
 		this.add_misc_settings(containerEl);
 	}
@@ -305,6 +310,74 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 				});
 		});
 	}
+
+	add_azure_project_settings(containerEl : HTMLElement) {
+
+		const desc = document.createDocumentFragment();
+		const content = document.createElement('div')
+		content.innerHTML = `
+		<p>The list of Projects and Abbreviations for your Azure instances</p>
+		<p>Issues for different projects are shortened to use abbreviations to make the Obsidian notes more concise</p>
+		`
+		desc.append(content)
+
+		new Setting(containerEl)
+			.setName('Azure DevOps Abbreviations')
+			.setDesc(desc)
+
+		this.plugin.settings.azure_projects.forEach((project, index) => {
+			const s = new Setting(containerEl);
+			
+			// Remove the name and description since we aren't using them. This
+			// plus the css class `.setting-item-info:empty` will get us more space
+			s.nameEl.remove();
+			s.descEl.remove();
+
+				s.addText((cb) => {
+					cb.setPlaceholder('Add an Project Name')
+					cb.setValue(this.plugin.settings.azure_projects[index].Name)
+					cb.onChange(async (value) => {
+						this.plugin.settings.azure_projects[index].Name = value
+						await this.plugin.saveSettings();
+					})
+					cb.inputEl.classList.add("setting_azure_projects_name")
+				})
+				.addText((cb) => {
+					cb.setPlaceholder('Example: Project Abbreviation')
+					cb.setValue(this.plugin.settings.azure_projects[index].Abbreviation);
+					cb.onChange(async (value) => {
+						this.plugin.settings.azure_projects[index].Abbreviation = value
+						await this.plugin.saveSettings();
+					})
+					cb.inputEl.classList.add("setting_azure_projects_abbrev")
+				})
+				.addExtraButton((cb) => {
+					cb.setIcon('cross')
+						.setTooltip('delete Project')
+						.onClick(async () => {
+							this.plugin.settings.azure_projects.splice(index, 1);
+							await this.plugin.saveSettings();
+							// Force refresh display
+							this.display();
+						})
+				})
+		})
+		
+		new Setting(containerEl).addButton((cb) => {
+			cb.setButtonText("Add new Azure project")
+				.setCta()
+				.onClick(async () => {
+					this.plugin.settings.azure_projects.push({
+						Name: '',
+						Abbreviation: ''
+					});
+					await this.plugin.saveSettings();
+					// Force refresh
+					this.display();
+				});
+		});
+	}
+	
 
 	add_azure_local_issue_settings(containerEl: HTMLElement) : void {
 		new Setting(containerEl)
