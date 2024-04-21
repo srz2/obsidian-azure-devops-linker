@@ -1,0 +1,11 @@
+{
+	"id": "azure-linker",
+	"name": "Azure Linker",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Quickly format a Azure issue tag as a link to you Azure instance.",
+	"author": "Steven Zilberberg",
+	"authorUrl": "stevenzilberberg.com",
+	"fundingUrl": "https://www.buymeacoffee.com/kvnfnpycl",
+	"isDesktopOnly": false
+}
