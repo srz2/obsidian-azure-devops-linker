@@ -272,19 +272,16 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 
 	add_azure_instance_settings(containerEl : HTMLElement) {
 
-		const desc = document.createDocumentFragment();
-		const content = document.createElement('div')
-		content.innerHTML = `
-		<p>The list of domain URLs for your Azure instances</p>
-		<p>Denote your default instance by selecting the <strong>Set As Default</strong> button. If <span style="text-decoration: underline;">no default is selected</span>, the <strong>first</strong> instance will be used</p>
-		</br>
-		<em>Note: A title is optional for your instances, but recommended for organization.</em>
+		const descContent = `
+		The list of domain URLs for your Azure instances
+		Denote your default instance by selecting the "Set As Default" button. If "no default is selected", the FIRST instance will be used
+
+		Note: A title is optional for your instances, but recommended for organization.
 		`
-		desc.append(content)
 
 		new Setting(containerEl)
 			.setName('Azure DevOps Instances')
-			.setDesc(desc)
+			.setDesc(descContent)
 
 		this.plugin.settings.azure_instance_urls.forEach((url, index) => {
 			const s = new Setting(containerEl);
@@ -369,17 +366,14 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 
 	add_azure_project_settings(containerEl : HTMLElement) {
 
-		const desc = document.createDocumentFragment();
-		const content = document.createElement('div')
-		content.innerHTML = `
-		<p>The list of Projects and Abbreviations for your Azure instances</p>
-		<p>Issues for different projects are parsed from user input using the abbreviations. The <b>Project Name</b> should directly reflect the DevOps project name. The <b>abbreviation</b> should be whatever is convenient for the user.</p>
+		const descContent = `
+		The list of Projects and Abbreviations for your Azure instances
+		Issues for different projects are parsed from user input using the abbreviations. The "Project Name" should directly reflect the DevOps project name. The "abbreviation" should be whatever is convenient for the user.
 		`
-		desc.append(content)
 
 		new Setting(containerEl)
 			.setName('Azure DevOps Abbreviations')
-			.setDesc(desc)
+			.setDesc(descContent)
 
 		this.plugin.settings.azure_projects.forEach((project, index) => {
 			const s = new Setting(containerEl);
