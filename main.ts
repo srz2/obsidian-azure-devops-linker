@@ -33,7 +33,7 @@ export default class AzureLinkerPlugin extends Plugin {
 
 		// This adds an editor command that can link a Azure issue to the local Azure instance
 		this.addCommand({
-			id: 'cmd-link-azure-issue',
+			id: 'link-azure-issue',
 			name: 'Link Azure DevOps issue',
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
 				if (this.settings.azure_instance_urls.length > 1) {
@@ -52,7 +52,7 @@ export default class AzureLinkerPlugin extends Plugin {
 
 		// This adds an editor command that can link a Azure issue to the local Azure instance
 		this.addCommand({
-			id: 'cmd-link-azure-issue-default-instance',
+			id: 'link-azure-issue-default-instance',
 			name: 'Link Azure DevOps issue (default instance)',
 			editorCallback: async (editor: Editor, view: MarkdownView) => {
 				// Check if no instances exists
@@ -89,7 +89,7 @@ export default class AzureLinkerPlugin extends Plugin {
 
 		// This adds an editor command that can link a Azure issue to a local issue _Info page
 		this.addCommand({
-			id: 'cmd-link-Azure-issue-info',
+			id: 'link-Azure-issue-info',
 			name: 'Link Azure DevOps issue to info',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
 				const local_issue_path = this.settings.local_issue_path;
