@@ -10,7 +10,7 @@ export class AzureIssueInputModal extends Modal {
 	constructor(app: App, insert_newline_on_return: boolean, onSubmit: (result: string) => void) {
 		super(app);
 		this.title = 'Enter your Azure issue';
-		this.description = 'Type in a azure issue number';
+		this.description = 'Type in an Azure DevOps issue number';
 		this.insert_newline_on_return = insert_newline_on_return;
 		this.onSubmit = onSubmit;
 		this.containerEl.addEventListener('keydown', (e) =>{
