@@ -286,8 +286,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 		this.plugin.settings.azure_instance_urls.forEach((url, index) => {
 			const s = new Setting(containerEl);
 			
-			// Remove the name and description since we aren't using them. This
-			// plus the css class `.setting-item-info:empty` will get us more space
+			// Remove the name and description since we aren't using them.
 			s.nameEl.remove();
 			s.descEl.remove();
 
