@@ -45,7 +45,7 @@ export class AzureIssueInputModal extends Modal {
 		contentEl.createEl("p", {text: this.description})
 
 		new Setting(contentEl)
-		.setName("Azure DevOp Issue")
+		.setName("Azure DevOps issue")
 		.addText((text) =>
 			text.onChange((value) => {
 			this.result = value
@@ -54,7 +54,7 @@ export class AzureIssueInputModal extends Modal {
 		new Setting(contentEl)
 		.addButton((btn) =>
 			btn
-			.setButtonText("Link Issue")
+			.setButtonText("Link issue")
 			.setCta()
 			.onClick(() => {
 				this.close();

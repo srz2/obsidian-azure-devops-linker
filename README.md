@@ -17,7 +17,7 @@ This will link to the default Azure DevOps instance of a given Azure DevOps Issu
 
 This will link to a local file for a given Azure Issue. If the path does not exist, it will be created
 
-Note: The *Local Issue Path* must be set
+Note: The *Local issue path* must be set
 Note: You can optionally change the "main" file. It defaults to "_Info"
 
 ## Demo

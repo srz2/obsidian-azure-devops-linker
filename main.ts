@@ -280,7 +280,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 		`
 
 		new Setting(containerEl)
-			.setName('Azure DevOps Instances')
+			.setName('Azure DevOps instances')
 			.setDesc(descContent)
 
 		this.plugin.settings.azure_instance_urls.forEach((url, index) => {
@@ -337,7 +337,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 				})
 				.addExtraButton((cb) => {
 					cb.setIcon('cross')
-						.setTooltip('delete instance')
+						.setTooltip('Delete instance')
 						.onClick(async () => {
 							this.plugin.settings.azure_instance_urls.splice(index, 1);
 							await this.plugin.saveSettings();
@@ -371,7 +371,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 		`
 
 		new Setting(containerEl)
-			.setName('Azure DevOps Abbreviations')
+			.setName('Azure DevOps abbreviations')
 			.setDesc(descContent)
 
 		this.plugin.settings.azure_projects.forEach((project, index) => {
@@ -383,7 +383,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 			s.descEl.remove();
 
 				s.addText((cb) => {
-					cb.setPlaceholder('Add an Project Name')
+					cb.setPlaceholder('Add a project name')
 					cb.setValue(this.plugin.settings.azure_projects[index].Name)
 					cb.onChange(async (value) => {
 						this.plugin.settings.azure_projects[index].Name = value
@@ -392,7 +392,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 					cb.inputEl.classList.add("setting_azure_projects_name")
 				})
 				.addText((cb) => {
-					cb.setPlaceholder('Example: Project Abbreviation')
+					cb.setPlaceholder('Example: project abbreviation')
 					cb.setValue(this.plugin.settings.azure_projects[index].Abbreviation);
 					cb.onChange(async (value) => {
 						this.plugin.settings.azure_projects[index].Abbreviation = value
@@ -402,7 +402,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 				})
 				.addExtraButton((cb) => {
 					cb.setIcon('cross')
-						.setTooltip('delete Project')
+						.setTooltip('Delete project')
 						.onClick(async () => {
 							this.plugin.settings.azure_projects.splice(index, 1);
 							await this.plugin.saveSettings();
@@ -430,7 +430,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 
 	add_azure_local_issue_settings(containerEl: HTMLElement) : void {
 		new Setting(containerEl)
-			.setName('Local Issue Path')
+			.setName('Local issue path')
 			.setDesc('The relative path to your issue folder')
 			.addText(text => text
 				.setPlaceholder('Relative issue path')
@@ -453,7 +453,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 			')'
 		)
 		new Setting(containerEl)
-				.setName('Local Issue Main File Name')
+				.setName('Local issue main file name')
 				.setDesc(settingMainFileNameDesc)
 				.addText(text => text
 					.setPlaceholder('Local Issue Main File')
@@ -468,7 +468,7 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 
 		// New Line Insertion
 		new Setting(containerEl)
-			.setName('New Line Insertion')
+			.setName('New line insertion')
 			.setDesc('Allow New Line After Pressing \'Return\' on Azure Issue Insertion')
 			.addToggle(newValue => newValue
 				.setValue(this.plugin.settings.input_modal_settings.insert_newline_after_return)
