@@ -1,7 +1,7 @@
 {
 	"id": "azure-linker",
 	"name": "Azure DevOps Linker",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "1.5.0",
 	"description": "Quickly format a Azure issue tag as a link to you Azure instance.",
 	"author": "Steven Zilberberg",
