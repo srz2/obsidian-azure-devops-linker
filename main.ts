@@ -12,6 +12,7 @@ interface LocalSettings {
 	local_issue_info_file: string;
 	input_modal_settings: {
 		insert_newline_after_return: boolean;
+		use_first_project_as_default: boolean;
 	}
 }
 
@@ -21,7 +22,8 @@ const DEFAULT_SETTINGS: LocalSettings = {
 	local_issue_path: '',
 	local_issue_info_file: '_Info',
 	input_modal_settings: {
-		insert_newline_after_return: true
+		insert_newline_after_return: true,
+		use_first_project_as_default: false
 	}
 }
 
@@ -146,8 +148,9 @@ export default class AzureLinkerPlugin extends Plugin {
 		if (content == ''){
 			new AzureIssueInputModal(this.app, this.settings.input_modal_settings.insert_newline_after_return, (result) => {
 				if (result !== ''){
-					// Parse input for project
+					// Parse input for project (assumes ticket has format of KEY-123)
 					const posDash = result.indexOf('-');
+
 					if (posDash >= 0){
 						const abbrev = result.substring(0, posDash).toLowerCase();
 						const targetProject = this.settings.azure_projects.filter(x => {
@@ -166,12 +169,21 @@ export default class AzureLinkerPlugin extends Plugin {
 							suggestion.open();
 						}
 					} else {
-						const suggestion = new AzureProjectSuggestModal(app, this.settings.azure_projects, (projectResult) => {
-							const newStr = this.createWebUrl(azure_url, projectResult.Name, result)
+						if (this.settings.azure_projects.length == 1 &&
+							this.settings.input_modal_settings.use_first_project_as_default
+						) {
+							// Default first project
+							const newStr = this.createWebUrl(azure_url, this.settings.azure_projects[0].Name, result);
 							editor.replaceSelection(newStr);
-						})
-						suggestion.setPlaceholder('Project parse failed, select the project to use as a reference')
-						suggestion.open();
+						} else {
+							// Ask use for project
+							const suggestion = new AzureProjectSuggestModal(app, this.settings.azure_projects, (projectResult) => {
+								const newStr = this.createWebUrl(azure_url, projectResult.Name, result)
+								editor.replaceSelection(newStr);
+							})
+							suggestion.setPlaceholder('Project parse failed, select the project to use as a reference')
+							suggestion.open();
+						}
 					}
 				}
 			})
@@ -475,6 +487,17 @@ class AzureLinkerSettingTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.input_modal_settings.insert_newline_after_return)
 				.onChange(async (value) => {
 					this.plugin.settings.input_modal_settings.insert_newline_after_return = value;
+					await this.plugin.saveSettings();
+				}))
+
+		// Add first project if only one project exists
+		new Setting(containerEl)
+			.setName('Use first project as default')
+			.setDesc('When linking an issue, if true and no project is provided or correctly parsed, the first project is used as default. Only valid when ONE project is defined.')
+			.addToggle(newValue => newValue
+				.setValue(this.plugin.settings.input_modal_settings.use_first_project_as_default)
+				.onChange(async (value) => {
+					this.plugin.settings.input_modal_settings.use_first_project_as_default = value;
 					await this.plugin.saveSettings();
 				}))
 	}
