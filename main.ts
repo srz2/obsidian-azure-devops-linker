@@ -61,7 +61,7 @@ export default class AzureLinkerPlugin extends Plugin {
 				} else {
 					// Find the default instance
 					let foundIndex = -1;
-					const defaultInstance = this.settings.azure_instance_urls.find((x, index, instance) => {
+					let defaultInstance = this.settings.azure_instance_urls.find((x, index, instance) => {
 						// Record index if found
 						const condition = x.IsDefault
 						if (condition){
@@ -79,6 +79,7 @@ export default class AzureLinkerPlugin extends Plugin {
 																												this.settings.azure_instance_urls[0].Title :
 																												this.settings.azure_instance_urls[0].Url
 																											}`)
+						defaultInstance = this.settings.azure_instance_urls[0]
 					}
 
 					// Execute the Azure Link on the default instance
